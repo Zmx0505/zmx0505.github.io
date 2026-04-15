@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="description" content="ZMx 视频作品集 - 求职展示，精选动态影像">
+    <title>ZMx · 视频作品集 | 求职展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 现代深色风格 — 专业·沉静·聚焦内容 */
+        body {
+            background: #0B0C0E;
+            background-image: radial-gradient(circle at 20% 30%, rgba(60, 70, 90, 0.08) 0.5px, transparent 0.5px);
+            background-size: 32px 32px;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, 'Noto Sans', sans-serif;
+            color: #EFF1F3;
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* 平滑滚动 & 优雅滚动条 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            background: #1A1D21;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3E4A5C;
+            border-radius: 12px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5B6E88;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+        }
+
+        /* 页眉区域 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid rgba(75, 95, 115, 0.4);
+            padding-bottom: 1rem;
+        }
+        .title-section h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #FFFFFF 0%, #B0C4DE 80%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .title-section .sub {
+            font-size: 0.85rem;
+            color: #8E9EAF;
+            margin-top: 0.3rem;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .badge {
+            background: rgba(70, 100, 130, 0.25);
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 400;
+            backdrop-filter: blur(2px);
+            border: 0.5px solid rgba(160, 190, 220, 0.3);
+        }
+        .status-area {
+            font-size: 0.8rem;
+            color: #9CAFBF;
+        }
+
+        /* 加载指示器 */
+        .loading-state, .error-state, .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: rgba(25, 30, 35, 0.6);
+            border-radius: 2rem;
+            backdrop-filter: blur(4px);
+            margin: 2rem 0;
+            border: 1px solid rgba(100, 130, 160, 0.2);
+        }
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(100, 150, 200, 0.3);
+            border-top-color: #5B8CBC;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .error-icon, .empty-icon {
+            font-size: 2.8rem;
+            margin-bottom: 0.8rem;
+            opacity: 0.8;
+        }
+        .retry-btn {
+            background: #2C3845;
+            border: 1px solid #5B7A9A;
+            color: #E5EEF5;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .retry-btn:hover {
+            background: #3E5062;
+            border-color: #7E9FC0;
+            transform: scale(0.97);
+        }
+
+        /* 视频网格 — 响应式作品集卡片 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 1.5rem 0 2rem;
+        }
+
+        /* 卡片设计 */
+        .video-card {
+            background: rgba(18, 22, 28, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            border: 1px solid rgba(80, 110, 140, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.25s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        .video-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(110, 150, 190, 0.6);
+            box-shadow: 0 20px 32px -12px rgba(0, 0, 0, 0.5);
+            background: rgba(22, 28, 35, 0.9);
+        }
+
+        /* 视频容器 统一宽高比 */
+        .video-wrapper {
+            position: relative;
+            background: #000000;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #0F1115;
+        }
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #010101;
+            display: block;
+        }
+        /* 默认video控件样式微调 */
+        video {
+            outline: none;
+        }
+
+        .card-info {
+            padding: 1rem 1.2rem 1.2rem;
+        }
+        .video-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            color: #EDF2F7;
+            margin-bottom: 0.3rem;
+            word-break: break-word;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .video-title::before {
+            content: "🎬";
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .video-meta {
+            font-size: 0.7rem;
+            color: #8AA0B5;
+            margin-top: 0.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .error-badge {
+            color: #E6A17A;
+            font-size: 0.7rem;
+            background: rgba(200, 100, 60, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 页脚 */
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            padding-top: 1.8rem;
+            border-top: 1px solid rgba(90, 115, 140, 0.3);
+            font-size: 0.75rem;
+            color: #7E8F9F;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem 1rem 2rem;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 1.8rem;
+            }
+            .title-section h1 {
+                font-size: 1.7rem;
+            }
+            .video-grid {
+                gap: 1.2rem;
+                grid-template-columns: 1fr;
+            }
+            .card-info {
+                padding: 0.8rem 1rem;
+            }
+            .video-title {
+                font-size: 1rem;
+            }
+        }
+
+        /* 辅助显示 */
+        .hidden {
+            display: none;
+        }
+        .text-center {
+            text-align: center;
+        }
+        button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <div class="title-section">
+            <h1>ZMx · 视频作品集</h1>
+            <div class="sub">
+                <span>✦ 动态影像档案</span>
+                <span class="badge">求职展示</span>
+            </div>
+        </div>
+        <div class="status-area" id="liveStatus">
+            🎥 精选作品
+        </div>
+    </header>
+
+    <!-- 网格容器：动态渲染视频卡片 -->
+    <div id="videoGridContainer" class="video-grid"></div>
+
+    <!-- 加载、错误、空状态占位 (动态切换) -->
+    <div id="loadingState" class="loading-state">
+        <div class="spinner"></div>
+        <div>加载作品集中...</div>
+    </div>
+    <div id="errorState" class="error-state hidden">
+        <div class="error-icon">⚠️</div>
+        <div id="errorMessage">无法加载视频列表</div>
+        <button class="retry-btn" id="retryFetchBtn">↻ 重试</button>
+    </div>
+    <div id="emptyState" class="empty-state hidden">
+        <div class="empty-icon">📭</div>
+        <div>暂无视频作品</div>
+        <div style="font-size: 0.8rem; margin-top: 0.5rem;">请在 video.json 中添加内容</div>
+    </div>
+
+    <footer class="footer">
+        <div>© ZMx 作品集 · 所有影像均为原创展示 | 动态更新</div>
+        <div style="margin-top: 0.4rem; font-size: 0.7rem;">基于 video.json 动态构建</div>
+    </footer>
+</div>
+
+<script>
+    (function() {
+        // DOM 元素
+        const gridContainer = document.getElementById('videoGridContainer');
+        const loadingDiv = document.getElementById('loadingState');
+        const errorDiv = document.getElementById('errorState');
+        const emptyDiv = document.getElementById('emptyState');
+        const errorMessageSpan = document.getElementById('errorMessage');
+        const retryBtn = document.getElementById('retryFetchBtn');
+        const liveStatusSpan = document.getElementById('liveStatus');
+
+        // 辅助函数：显示/隐藏状态
+        function showLoading() {
+            loadingDiv.classList.remove('hidden');
+            errorDiv.classList.add('hidden');
+            emptyDiv.classList.add('hidden');
+            gridContainer.innerHTML = '';   // 清空网格
+            gridContainer.classList.add('hidden');
+            if (liveStatusSpan) liveStatusSpan.innerHTML = '⏳ 读取作品中...';
+        }
+
+        function showError(message) {
+            loadingDiv.classList.add('hidden');
+            errorDiv.classList.remove('hidden');
+            emptyDiv.classList.add('hidden');
+            gridContainer.classList.add('hidden');
+            if (errorMessageSpan) errorMessageSpan.innerText = message || '加载失败，请检查 video.json 文件或网络';
+            if (liveStatusSpan) liveStatusSpan.innerHTML = '❌ 加载失败';
+        }
+
+        function showEmpty() {
+            loadingDiv.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+            emptyDiv.classList.remove('hidden');
+            gridContainer.classList.add('hidden');
+            gridContainer.innerHTML = '';
+            if (liveStatusSpan) liveStatusSpan.innerHTML = '📭 暂无视频';
+        }
+
+        function showGrid() {
+            loadingDiv.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+            emptyDiv.classList.add('hidden');
+            gridContainer.classList.remove('hidden');
+            if (liveStatusSpan) liveStatusSpan.innerHTML = `🎞️ 共 ${gridContainer.children.length} 部作品`;
+        }
+
+        // 转义HTML 防止XSS (name字段安全)
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+                return c;
+            });
+        }
+
+        // 创建单个视频卡片
+        function createVideoCard(item, index) {
+            // 数据校验
+            const rawName = item.name || item.title || `未命名作品 ${index + 1}`;
+            const videoSrc = item.src || item.url || '';
+            if (!videoSrc) {
+                // 如果 src 无效，仍然生成卡片但显示错误
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                card.innerHTML = `
+                    <div class="video-wrapper" style="background:#1A1E24; display:flex; align-items:center; justify-content:center;">
+                        <div style="color:#7F8C9A; text-align:center; padding:1rem;">⚠️ 视频地址缺失</div>
+                    </div>
+                    <div class="card-info">
+                        <div class="video-title">${escapeHtml(rawName)}</div>
+                        <div class="video-meta">
+                            <span class="error-badge">⚡ 无效路径</span>
+                            <span>请检查 src 字段</span>
+                        </div>
+                    </div>
+                `;
+                return card;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'video-card';
+
+            // video 容器
+            const videoWrapper = document.createElement('div');
+            videoWrapper.className = 'video-wrapper';
+            const videoEl = document.createElement('video');
+            videoEl.controls = true;
+            videoEl.preload = 'metadata';   // 获取第一帧预览，不预加载整片
+            videoEl.playsInline = true;      // iOS 内联播放
+            videoEl.setAttribute('controlslist', 'nodownload'); // 可选，但不强制
+            // 设置视频源
+            const source = document.createElement('source');
+            source.src = videoSrc;
+            source.type = 'video/mp4';
+            // 支持其他格式？可加 fallback，但主要 mp4
+            videoEl.appendChild(source);
+            // 错误处理：视频加载失败时显示友好提示
+            let videoErrorFlag = false;
+            const handleVideoError = () => {
+                if (videoErrorFlag) return;
+                videoErrorFlag = true;
+                // 移除原有内容并展示错误占位符
+                videoWrapper.innerHTML = '';
+                videoWrapper.style.display = 'flex';
+                videoWrapper.style.alignItems = 'center';
+                videoWrapper.style.justifyContent = 'center';
+                videoWrapper.style.background = '#151A20';
+                videoWrapper.innerHTML = `<div style="color:#C0A080; text-align:center; font-size:0.8rem; padding:0.8rem;">🎥 视频加载失败<br><span style="font-size:0.7rem; color:#8A9BB0;">无法播放，请检查文件路径或格式</span></div>`;
+                // 同时在卡片信息区域增加错误标记
+                const infoDiv = card.querySelector('.card-info');
+                if (infoDiv && !infoDiv.querySelector('.video-error-footnote')) {
+                    const errNote = document.createElement('div');
+                    errNote.className = 'video-meta';
+                    errNote.style.marginTop = '6px';
+                    errNote.innerHTML = `<span class="error-badge">⚠️ 加载失败: 文件不存在或格式不支持</span>`;
+                    infoDiv.appendChild(errNote);
+                }
+            };
+            videoEl.addEventListener('error', handleVideoError);
+            // 如果 src 空也会触发 error，但前面已经处理了src空的情况。
+            videoWrapper.appendChild(videoEl);
+
+            // 信息区域
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'card-info';
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'video-title';
+            titleDiv.textContent = escapeHtml(rawName);
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'video-meta';
+            // 显示文件简短路径或类型
+            const fileName = videoSrc.split('/').pop() || 'video';
+            metaDiv.innerHTML = `<span>📁 ${escapeHtml(fileName.length > 25 ? fileName.substring(0, 22) + '...' : fileName)}</span>
+                                 <span>🎮 原生播放</span>`;
+            infoDiv.appendChild(titleDiv);
+            infoDiv.appendChild(metaDiv);
+            card.appendChild(videoWrapper);
+            card.appendChild(infoDiv);
+
+            // 额外边缘检测：如果video已经有网络错误，但source.src导致404，确保错误UI显示
+            // 如果已经加载metadata成功，则无需干预
+            return card;
+        }
+
+        // 核心：获取video.json并渲染
+        async function fetchAndRender() {
+            showLoading();
+            try {
+                // 添加随机参数避免缓存（可选，但避免开发时缓存问题）
+                const fetchUrl = `video.json?t=${Date.now()}`;
+                const response = await fetch(fetchUrl, {
+                    method: 'GET',
+                    headers: { 'Cache-Control': 'no-cache' }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: 无法获取 video.json`);
+                }
+                
+                let videoList;
+                try {
+                    videoList = await response.json();
+                } catch (jsonErr) {
+                    throw new Error('JSON 解析失败，请检查 video.json 格式是否正确 (应为数组格式)');
+                }
+                
+                // 校验是否为数组
+                if (!Array.isArray(videoList)) {
+                    throw new Error('video.json 数据格式错误: 期望根数据为数组 []');
+                }
+                
+                // 空数组处理
+                if (videoList.length === 0) {
+                    showEmpty();
+                    return;
+                }
+                
+                // 开始渲染网格
+                gridContainer.innerHTML = ''; // 清空容器
+                let validCardsCount = 0;
+                for (let i = 0; i < videoList.length; i++) {
+                    const item = videoList[i];
+                    // 允许最少含有name或src任意一项, 但至少要展示卡片，无src卡片也会展示错误样式
+                    if (!item && typeof item !== 'object') continue;
+                    const card = createVideoCard(item, i);
+                    gridContainer.appendChild(card);
+                    validCardsCount++;
+                }
+                
+                if (validCardsCount === 0) {
+                    // 所有卡片都不合法？但是至少会生成错误卡片，但没有任何有效内容? 但仍显示网格但提示无有效数据
+                    if (gridContainer.children.length === 0) {
+                        showEmpty();
+                        return;
+                    }
+                }
+                showGrid();
+                // 如果有效卡片数量 >0 但所有卡片都有视频错误，仍然显示网格，让用户知晓
+            } catch (err) {
+                console.error('加载作品集出错:', err);
+                let userMsg = '';
+                if (err.message.includes('fetch')) userMsg = '网络请求失败，请确认 video.json 文件是否存在且可访问';
+                else if (err.message.includes('JSON')) userMsg = 'video.json 解析错误，请检查 JSON 格式 (注意双引号、无尾逗号)';
+                else userMsg = err.message || '未知错误，请检查控制台';
+                showError(userMsg);
+            }
+        }
+
+        // 重试按钮绑定
+        if (retryBtn) {
+            retryBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                fetchAndRender();
+            });
+        }
+
+        // 启动初始化
+        fetchAndRender();
+
+        // 可选：监听页面可见性变化或者不处理，保证干净
+        // 增加额外友好: 如果video.json 404 等错误时，控制台提示。
+    })();
+</script>
+</body>
+</html>
