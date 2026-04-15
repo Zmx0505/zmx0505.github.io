@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="description" content="ZMx视频合集 - 黑暗绅士风格，即将呈现优雅影像">
+    <title>ZMx · 黑暗绅士视频合集</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 优雅重置 + 黑暗绅士基调 */
+        body {
+            background-color: #0A0A0C;
+            background-image: radial-gradient(circle at 25% 40%, rgba(212, 175, 55, 0.02) 1.2px, transparent 1.2px),
+                              radial-gradient(circle at 70% 85%, rgba(180, 130, 48, 0.015) 1px, transparent 1px);
+            background-size: 48px 48px, 32px 32px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            color: #E8E6E3;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            scroll-behavior: smooth;
+        }
+
+        /* 自定义细边框滚动条 (绅士细节) */
+        ::-webkit-scrollbar {
+            width: 5px;
+            background: #141416;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B49450;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1E1E20;
+        }
+
+        /* 主容器 - 优雅留白 */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* 页眉区域 – 低调奢华 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 4rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+            padding-bottom: 1.25rem;
+        }
+        .brand {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #F5E7C8 0%, #C9A03D 80%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(201, 160, 61, 0.2);
+        }
+        .logo-accent {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: #C9A03D;
+            letter-spacing: 1px;
+        }
+        .header-tag {
+            font-size: 0.75rem;
+            font-weight: 400;
+            background: rgba(201, 160, 61, 0.12);
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            color: #D8C38B;
+            border: 0.5px solid rgba(212, 175, 55, 0.3);
+            backdrop-filter: blur(2px);
+        }
+
+        /* 欢迎主角区 */
+        .hero {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            position: relative;
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.75rem;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, #EADFB4, #C7A84E);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+        .hero-sub {
+            font-size: 0.9rem;
+            color: #9F9C97;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 300;
+            word-break: keep-all;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .hero-sub::before, .hero-sub::after {
+            content: "✦";
+            font-size: 0.7rem;
+            color: #C9A03D;
+            opacity: 0.6;
+        }
+        .hero-sub::after {
+            content: "✦";
+        }
+        .gentleman-line {
+            width: 70px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #C9A03D, #E6CD8F, #C9A03D, transparent);
+            margin: 1.2rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* 空状态核心区 – 留白艺术，绅士等候室 */
+        .collection-empty {
+            background: rgba(18, 18, 22, 0.7);
+            backdrop-filter: blur(2px);
+            border-radius: 42px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+            padding: 3rem 1.8rem;
+            max-width: 620px;
+            margin: 2rem auto 3rem auto;
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+        .collection-empty:hover {
+            border-color: rgba(212, 175, 55, 0.45);
+            box-shadow: 0 24px 40px -16px rgba(0,0,0,0.8);
+            background: rgba(22, 22, 28, 0.75);
+        }
+
+        .empty-icon {
+            font-size: 4.2rem;
+            margin-bottom: 1.2rem;
+            opacity: 0.85;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+        }
+        .empty-icon span {
+            display: inline-block;
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+        @keyframes gentleFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .empty-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+            background: linear-gradient(120deg, #ECE3CD, #BFA76A);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.85rem;
+        }
+        .empty-message {
+            font-size: 1rem;
+            color: #BCB7AD;
+            max-width: 380px;
+            margin: 0 auto;
+            font-weight: 350;
+        }
+        .empty-detail {
+            font-size: 0.8rem;
+            color: #8C887E;
+            margin-top: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .detail-chip {
+            background: rgba(201, 160, 61, 0.08);
+            padding: 0.25rem 1rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            border: 0.5px solid rgba(212, 175, 55, 0.2);
+        }
+        .detail-chip i {
+            font-style: normal;
+            margin-right: 4px;
+        }
+
+        /* 象征性装饰 – 绅士卡片留空区域 (无实际视频，仅为氛围) */
+        .atmosphere-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .ghost-card {
+            background: rgba(30, 30, 36, 0.3);
+            border-radius: 24px;
+            width: 140px;
+            height: 90px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #6a675e;
+            letter-spacing: 0.5px;
+        }
+        /* 移动端隐藏幽灵卡片保持干净，但留空也可爱，默认显示一点意境 */
+        @media (max-width: 580px) {
+            .ghost-card {
+                width: 100px;
+                height: 70px;
+                font-size: 0.6rem;
+            }
+            .empty-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* footer 绅士落款 */
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            padding: 1.8rem 0.5rem 1rem;
+            border-top: 1px solid rgba(201, 160, 61, 0.15);
+            font-size: 0.75rem;
+            color: #7A766C;
+            letter-spacing: 0.6px;
+        }
+        .footer a {
+            color: #C9A03D;
+            text-decoration: none;
+            border-bottom: 0.5px dotted rgba(201, 160, 61, 0.5);
+            transition: color 0.2s;
+        }
+        .footer a:hover {
+            color: #E6C87A;
+        }
+        .signature {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 移动端完整适配 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.2rem 1rem;
+            }
+            .header {
+                margin-bottom: 2rem;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .brand {
+                justify-content: center;
+            }
+            .logo, .logo-accent {
+                font-size: 1.6rem;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero-sub {
+                font-size: 0.75rem;
+            }
+            .collection-empty {
+                padding: 2rem 1.2rem;
+                margin: 1.5rem auto;
+                border-radius: 32px;
+            }
+            .empty-icon {
+                font-size: 3.2rem;
+            }
+            .empty-title {
+                font-size: 1.5rem;
+            }
+            .empty-message {
+                font-size: 0.9rem;
+            }
+            .gentleman-line {
+                width: 50px;
+            }
+        }
+
+        /* 极简微光动画 */
+        @keyframes softGlow {
+            0% { text-shadow: 0 0 0px rgba(201,160,61,0); }
+            100% { text-shadow: 0 0 3px rgba(201,160,61,0.2); }
+        }
+        .logo {
+            animation: softGlow 3s infinite alternate;
+        }
+        /* 保留所有视频区域完全留空，没有模拟视频内容 */
+        .video-placeholder-area {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 黑暗绅士风格头部 -->
+        <header class="header">
+            <div class="brand">
+                <div class="logo">ZMx</div>
+                <div class="logo-accent">// CINEMATIC</div>
+            </div>
+            <div class="header-tag">
+                🎩 绅士典藏
+            </div>
+        </header>
+
+        <!-- 主内容: 欢迎+空状态合集 -->
+        <main>
+            <div class="hero">
+                <h1>欢迎来到 <span>ZMx</span> 的视频合集</h1>
+                <div class="hero-sub">DARK GENTLEMAN'S COLLECTION</div>
+                <div class="gentleman-line"></div>
+            </div>
+
+            <!-- 留空区域：无任何视频内容，仅空状态优雅展示 -->
+            <div class="collection-empty">
+                <div class="empty-icon">
+                    <span>🎬</span> <span style="font-size: 2.8rem;">🕯️</span>
+                </div>
+                <div class="empty-title">暂无视频</div>
+                <div class="empty-message">
+                    影像沉默，酝酿格调。<br>ZMx 合集即将呈现专属的视听叙事。
+                </div>
+                <div class="empty-detail">
+                    <span class="detail-chip">⌛ 敬请期待</span>
+                    <span class="detail-chip">🎞️ 策划中</span>
+                    <span class="detail-chip">✨ 绅士影像志</span>
+                </div>
+            </div>
+
+            <!-- 氛围点缀：仅为视觉效果，没有实际视频卡片数据 —— 完全留空但优雅暗示合集结构 -->
+            <div class="atmosphere-grid">
+                <div class="ghost-card">◈ 静帧 ◈</div>
+                <div class="ghost-card">◈ 未启 ◈</div>
+                <div class="ghost-card">◈ 序章 ◈</div>
+            </div>
+            <!-- 非常克制的说明，没有展示任何视频内容，满足留空要求 -->
+        </main>
+
+        <!-- 页脚 保持绅士调性 -->
+        <footer class="footer">
+            <div class="signature">
+                <span>ZMx COLLECTION</span> 
+                <span style="color: #C9A03D;">✦</span> 
+                <span>Dark Elegance</span>
+            </div>
+            <div style="margin-top: 0.6rem;">
+                curated with silence · 影像将至
+            </div>
+        </footer>
+    </div>
+
+    <!-- 无任何视频脚本，纯静态留白合集页面 -->
+</body>
+  </html>
